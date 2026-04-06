@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Responsive Website Example</title>
+
+<style>
+
+
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.container {
+    width: 100%;
+}
+
+.header, .sidebar, .content, .footer {
+    padding: 20px;
+    color: white;
+}
+
+.header {
+    background: #007bff;
+    text-align: center;
+}
+
+.sidebar {
+    background: #6c757d;
+}
+
+.content {
+    background: #17a2b8;
+}
+
+.footer {
+    background: #343a40;
+    text-align: center;
+}
+
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    background: rgba(255,255,255,0.2);
+    margin: 10px 0;
+    padding: 10px;
+}
+
+
+@media (min-width: 768px) {
+
+    .main {
+        display: flex;
+    }
+
+    .sidebar {
+        width: 30%;
+    }
+
+    .content {
+        width: 70%;
+    }
+}
+
+
+@media (min-width: 1024px) {
+
+    .container {
+        max-width: 1100px;
+        margin: auto;
+    }
+
+    .header {
+        font-size: 28px;
+    }
+
+    .content {
+        font-size: 18px;
+    }
+}
+
+
+@media (max-width: 767px) {
+
+    .header {
+        font-size: 22px;
+    }
+
+    .sidebar, .content {
+        width: 100%;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+   
+    <div class="header">
+        <h1>My Responsive Website</h1>
+        <p>This website adapts to mobile, tablet, and desktop screen sizes.</p>
+    </div>
+
+    <div class="main">
+
+        <div class="sidebar">
+            <h2>Navigation</h2>
+            <ul>
+                <li>Home</li>
+                <li>About Us</li>
+                <li>Services</li>
+                <li>Portfolio</li>
+                <li>Contact</li>
+            </ul>
+
+            <h3>Latest News</h3>
+            <p>
+                Our website has been redesigned using modern responsive design techniques.
+                Resize the browser window to see the layout change.
+            </p>
+        </div>
+
+        
+        <div class="content">
+            <h2>Welcome</h2>
+            <p>
+                This is the main content area. It contains important information about the website.
+                The layout changes automatically depending on the screen size.
+            </p>
+
+            <h3>Features</h3>
+            <ul>
+                <li>Responsive layout using CSS media queries</li>
+                <li>Mobile-friendly design</li>
+                <li>Flexible layout using flexbox</li>
+                <li>Readable text on all devices</li>
+            </ul>
+
+            <h3>Example Article</h3>
+            <p>
+                Responsive design ensures that websites work well on all devices including
+                smartphones, tablets, and desktops. This improves user experience and accessibility.
+            </p>
+
+            <p>
+                Try resizing your browser window or opening this page on different devices
+                to see how the sidebar and content adjust automatically.
+            </p>
+
+        </div>
+
+    </div>
+
+   
+    <div class="footer">
+        <p>© 2026 My Responsive Website | Designed using CSS Media Queries</p>
+    </div>
+
+</div>
+
+</body>
+</html>

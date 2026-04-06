@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Choti.css">
+</head>
+<body>
+
+    <div class="matrix-bg" aria-hidden="true"></div>
+
+    <div class="top-clock" id="topClock">
+        <div id="digitalTime">--:--:--</div>
+        <div id="digitalDate">----</div>
+        <div id="digitalDay">----</div>
+        <div class="day-progress-wrap">
+            <div id="dayProgressBar" class="day-progress-bar"></div>
+        </div>
+        <div id="dayProgressLabel" class="day-progress-label">Day progress: 0%</div>
+    </div>
+
+    <h1>Welcome to The Matrix</h1>
+
+
+    <div class="LoginScreen">
+
+         <p> Login Page</p>
+
+        <input id="myusrnm" label="Username" type="text" placeholder="Username">
+        <input id="mypswd" label="Password" type="password" placeholder="Password">
+        <button id="lgnbtn">Login</button>
+
+    </div>
+
+    <div class="weather-container">
+        <h2>Current Location Weather</h2>
+        <button id="refreshWeather">Refresh Weather</button>
+
+        <div id="weatherCard" class="weather-card">
+            <p id="location">Location: --</p>
+            <p id="temperature">Temperature: --</p>
+            <p id="description">Weather: --</p>
+            <p id="humidity">Humidity: --</p>
+            <p id="wind">Wind: --</p>
+            <p id="timezone">Timezone: --</p>
+            <p id="visibility">Visibility: --</p>
+            <p id="error" class="error-message"></p>
+        </div>
+        <div class="sun-times">
+            <p id="sunrise">Sunrise: --</p>
+            <p id="sunset">Sunset: --</p>
+        </div>
+    </div>
+
+    <script src="WeatherApi.js"></script>
+    <script src="Choti.js"></script>
+</body>
+</html>

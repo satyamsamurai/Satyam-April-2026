@@ -1,0 +1,82 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: monospace;
+    /* animated holi gradient background */
+    animation: holiBG 15s ease infinite;
+}
+
+@keyframes holiBG {
+    0% { background: linear-gradient(0deg, #ff0055, #ffcc00); }
+    20% { background: linear-gradient(0deg, #00ffcc, #ff66ff); }
+    40% { background: linear-gradient(0deg, #00aaff, #ff0055); }
+    60% { background: linear-gradient(0deg, #ffcc00, #00ffcc); }
+    80% { background: linear-gradient(0deg, #ff66ff, #00aaff); }
+    100% { background: linear-gradient(0deg, #ff0055, #ffcc00); }
+}
+
+/* 9:16 Vertical Reel Layout */
+.container {
+    width: 100vw;
+    height: 100vh;
+    max-width: 450px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    /* make sure gradient from body shows through */
+}
+
+/* Terminal */
+#terminal {
+    position: absolute;
+    top: 20%;
+    width: 100%;
+    text-align: center;
+    color: #00ff88;
+    font-size: 18px;
+    z-index: 2;
+    background: rgba(0,0,0,0.6); /* block style for visibility */
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+
+/* Canvas */
+#canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    mix-blend-mode: screen; /* makes colors more vibrant against dark/gradient */
+}
+
+/* Final Message */
+#finalMessage {
+    position: absolute;
+    bottom: 25%;
+    width: 100%;
+    text-align: center;
+    color: white;
+    opacity: 0;
+    z-index: 3;
+    transition: opacity 2s ease-in-out;
+}
+
+/* popup effect for the message */
+#finalMessage.pop {
+    animation: messagePop 0.8s ease forwards;
+}
+
+@keyframes messagePop {
+    0% { transform: scale(0.5); opacity: 0; }
+    60% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+#finalMessage h1 {
+    font-size: 36px;
+    margin: 0;
+}
+
+#finalMessage p {
+    font-size: 16px;
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Responsive Hamburger Menu</title>
+
+<style>
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.nav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.nav-menu li {
+    margin-left: 20px;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+
+.menu-toggle {
+    display: none;
+}
+
+.hamburger {
+    display: none;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+@media (max-width: 768px) {
+
+    .hamburger {
+        display: block;
+    }
+
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #444;
+    }
+
+    .nav-menu li {
+        margin: 0;
+        padding: 10px;
+        border-top: 1px solid #555;
+    }
+
+ 
+    .menu-toggle:checked + .hamburger + .nav-menu {
+        display: flex;
+    }
+    p{
+        font-size: xx-large;
+    }
+    h2{
+        font-size: xx-large;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+
+        <div class="logo">MySite</div>
+
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+
+       
+        <label for="menu-toggle" class="hamburger">
+            ☰
+        </label>
+
+       
+        <ul class="nav-menu">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Portfolio</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+
+    </div>
+</nav>
+
+<div style="padding:20px">
+    <h2>Responsive Navigation Example</h2>
+    <p>If We Resize the browser window then we see the hamburger menu on smaller screens.</p>
+    <p>On mobile, if we click the ☰ icon it opens and closes the menu.</p>
+</div>
+
+</body>
+</html>

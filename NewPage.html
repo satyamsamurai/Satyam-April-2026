@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+    <p id="heroText" class="hero-title">My New Page</p>
+    <div class="card">
+        <div class="hero">
+            <span class="spark">✨</span>
+            <h1>Welcome to Your Awesome Page</h1>
+            <p id="tagline">Let's make this interactive with JavaScript.</p>
+        </div>
+
+        <div class="controls">
+            <button id="themeToggle">Switch to Dark Theme</button>
+            <button id="colorButton">Random Gradient</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-block">
+                <h3>Clicks</h3>
+                <p id="clickCount">0</p>
+            </div>
+            <div class="stat-block">
+                <h3>Live Time</h3>
+                <p id="liveTime">--:--:--</p>
+            </div>
+        </div>
+
+        <input id="messageInput" placeholder="Type your message" />
+        <p id="messagePreview" class="message-preview">Your text preview appears here.</p>
+    </div>
+
+
+<h2>Current Weather</h2>
+<button onclick="getWeather()">Get Weather</button>
+
+<p id="location"></p>
+<p id="temperature"></p>
+<p id="description"></p>
+
+<script src="WeatherApi.js"></script>
+
+</body>
+</html>
+
+    <script>
+        const body = document.body;
+        const themeToggle = document.getElementById('themeToggle');
+        const colorButton = document.getElementById('colorButton');
+        const clickCount = document.getElementById('clickCount');
+        const liveTime = document.getElementById('liveTime');
+        const messageInput = document.getElementById('messageInput');
+        const messagePreview = document.getElementById('messagePreview');
+        const tagline = document.getElementById('tagline');
+        const heroText = document.getElementById('heroText');
+
+        let clicks = 0;
+
+        function formatTime(date) {
+            return date.toLocaleTimeString('en-US', { hour12: false });
+        }
+
+        function formatDay(date) {
+            return date.toLocaleDateString('en-US', { weekday: 'long' });
+        }
+
+        function updateClock() {
+            const now = new Date();
+            liveTime.textContent = `${formatDay(now)} ${formatTime(now)}`;
+        }
+
+        function randomGradient() {
+            const a = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            const c = Math.floor(Math.random() * 256);
+            const d = Math.floor(Math.random() * 256);
+            body.style.background = `linear-gradient(120deg, rgba(${a},${b},${c},0.55), rgba(${d},${255-a},${255-b},0.82))`;
+            tagline.textContent = 'Look at that new color vibe!';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark');
+            const isDark = body.classList.contains('dark');
+            themeToggle.textContent = isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme';
+        });
+
+        colorButton.addEventListener('click', () => {
+            randomGradient();
+            clicks += 1;
+            clickCount.textContent = clicks;
+        });
+
+        messageInput.addEventListener('input', (event) => {
+            const text = event.target.value.trim();
+            messagePreview.textContent = text.length ? text : 'Your text preview appears here.';
+            heroText.textContent = text.length ? text : 'My New Page';
+            heroText.classList.toggle('hero-large', text.length > 0);
+        });
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+
+    <style>
+        :root {
+            --bg: #f3f5ff;
+            --card: rgba(255, 255, 255, 0.9);
+            --text: #1d1d3f;
+            --muted: #444;
+            --accent: #5e52f0;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(circle at top, #dde7ff 0%, #f6f9ff 40%, #f0f3ff 100%);
+            transition: background 0.3s ease, color 0.3s ease;
+            color: var(--text);
+            padding: 24px;
+        }
+
+        body.dark {
+            background: radial-gradient(circle at top, #20212e 0%, #12141f 45%, #0d0f16 100%);
+            color: #f8f8ff;
+        }
+
+        .card {
+            width: min(760px, 100%);
+            background: var(--card);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 22px;
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.5);
+            animation: floatIn 0.6s ease;
+        }
+
+        body.dark .card {
+            background: rgba(20, 26, 40, 0.88);
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        .hero {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .spark {
+            font-size: 1.3rem;
+            animation: pulse 1.6s ease-in-out infinite;
+        }
+
+        .hero-title {
+            margin: 0.4rem auto 1rem;
+            font-size: 1.2rem;
+            color: #2a2c43;
+            transition: font-size 0.2s ease, color 0.2s ease;
+            max-width: 90vw;
+            display: inline-block;
+            white-space: normal;
+            word-wrap: break-word;
+            text-align: center;
+        }
+
+        .hero-large {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #71ee0b;
+            max-width: 90vw;
+            display: inline-block;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.7rem, 4vw, 2.4rem);
+            letter-spacing: 0.6px;
+        }
+
+        #tagline {
+            margin: 10px 0 14px;
+            color: var(--muted);
+            transition: color 0.3s ease;
+        }
+
+        body.dark #tagline {
+            color: #d0d4ff;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            padding: 0.6rem 1rem;
+            background: linear-gradient(135deg, #5d5bff, #8b5dff);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(93, 91, 255, 0.23);
+            transition: transform 0.13s ease, filter 0.15s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin: 10px 0 14px;
+        }
+
+        .stat-block {
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0,0,0,0.05);
+            padding: 12px;
+            text-align: left;
+            transition: background 0.2s ease;
+        }
+
+        body.dark .stat-block {
+            background: rgba(44, 52, 76, 0.6);
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        .stat-block h3 {
+            margin: 0 0 4px;
+            font-size: 0.85rem;
+            color: #6b6b96;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .stat-block p {
+            margin: 0;
+            font-size: 1.9rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        #liveTime {
+            font-size: 2rem;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #c6c6e7;
+            background: white;
+            padding: 10px 12px;
+            font-size: 1rem;
+            margin-top: 6px;
+            box-sizing: border-box;
+        }
+
+        body.dark input {
+            background: #1d2439;
+            color: #f5f5ff;
+            border-color: #3f4969;
+        }
+
+        .message-preview {
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: #1b1c3f;
+            min-height: 1.3em;
+            border-left: 3px solid #5d5bff;
+            padding-left: 8px;
+            background: rgba(93, 91, 255, 0.08);
+            border-radius: 8px;
+        }
+
+        body.dark .message-preview {
+            background: rgba(74, 80, 128, 0.25);
+            color: #edf0ff;
+            border-left-color: #8f8bff;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.18); }
+        }
+
+        @keyframes floatIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
+    <script src="WeatherApi.js"></script>
+</body>
+</html>
