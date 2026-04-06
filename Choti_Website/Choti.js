@@ -9,9 +9,9 @@ loginButton.addEventListener("click", function () {
     const usernameValue = myUsername.value.trim();
     const passwordValue = myPassword.value.trim();
 
-    if (usernameValue === "choti" && passwordValue === "choti123") {
+    if (usernameValue === "choti" && passwordValue === "123") {
         // alert("Login successful!");
-        window.location.href = "Choti1.html";
+        window.location.href = "Choti_Website/Choti1.html";
     } else {
         alert("Invalid username or password. Please try again.");
     }
