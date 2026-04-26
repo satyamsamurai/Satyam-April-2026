@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Team Matrix</title>
+    <link rel="stylesheet" href="Choti1.css">
+</head>
+    <canvas id="matrixRain"></canvas>
+
+    <div class="top-clock" id="topClock">
+        <div id="digitalTime">--:--:--</div>
+        <div id="digitalDate">----</div>
+        <div id="digitalDay">----</div>
+        <div class="day-progress-wrap">
+            <div id="dayProgressBar" class="day-progress-bar"></div>
+        </div>
+        <div id="dayProgressLabel" class="day-progress-label">Day progress: 0%</div>
+    </div>
+
+    <div>
+        <button id="themeToggle" class="theme-toggle">Switch to Green Theme</button>
+        
+        <button id="rainToggle" class="theme-toggle rain-toggle">Turn Off Rain</button>
+    </div>
+
+    <!-- dynamic location header (hero text) -->
+    <section class="hero-container">
+        <h1 id="locationHeader">Welcome to Tech Team Matrix</h1>
+        <h1 id="weatherSummary" class="weather-summary">loading weather details...</h1>
+    </section>
+
+    <section id="weatherDetails" class="weather-details">
+        <h3>Weather Insight</h3>
+        <p id="weatherInsightText">Fetching weather insight...</p>
+    </section>
+
+    <section id="newsSection" class="news-section">
+        <h2>Local News</h2>
+        <p id="newsLocationLabel">News for: --</p>
+        <p id="newsInfo" class="news-info">Loading latest headlines...</p>
+        <div id="newsContainer" class="news-container"></div>
+    </section>
+
+    <div class="weather-container">
+        <h2>Current Location Weather</h2>
+        <button id="refreshWeather">Refresh Weather</button>
+
+        <div id="weatherCard" class="weather-card">
+            <p id="location">Location: --</p>
+            <p id="temperature">Temperature: --</p>
+            <p id="description">Weather: --</p>
+            <p id="humidity">Humidity: --</p>
+            <p id="wind">Wind: --</p>
+            <p id="timezone">Timezone: --</p>
+            <p id="visibility">Visibility: --</p>
+            <p id="error" class="error-message"></p>
+        </div>
+        <div class="sun-times">
+            <p id="sunrise">Sunrise: --</p>
+            <p id="sunset">Sunset: --</p>
+        </div>
+    </div>
+
+    <!-- System Performance Widget -->
+    <div id="systemPerformanceWidget" class="system-performance-widget">
+        <h4>System Performance</h4>
+        <div class="cpu-container">
+            <p id="cpuText">CPU: Loading...</p>
+            <div id="cpuIndicator" class="cpu-indicator">
+                <div class="cpu-bar"></div>
+            </div>
+        </div>
+        <p id="ramText">RAM: Loading...</p>
+        <div class="battery-container">
+            <p id="batteryText">Battery: Loading...</p>
+            <div id="batteryBars" class="battery-bars">
+                <div class="battery-bar"></div>
+                <div class="battery-bar"></div>
+                <div class="battery-bar"></div>
+                <div class="battery-bar"></div>
+                <div class="battery-bar"></div>
+                <div class="battery-bar"></div>
+                <div class="battery-bar"></div>
+                <div class="battery-bar"></div>
+                <div class="battery-bar"></div>
+                <div class="battery-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Internet Status Widget -->
+    <div id="internetStatusWidget" class="internet-status-widget">
+        <h4>Internet Status</h4>
+        <div id="statusIndicator" class="status-indicator online">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <p id="statusText" class="status-text">Online</p>
+    </div>
+
+    <!-- Network Speed Widget -->
+    <div id="networkSpeedWidget" class="network-speed-widget">
+        <h4>Network Speed</h4>
+        <p id="networkSpeedText">Measuring...</p>
+    </div>
+
+    <!-- audio element for page load sound -->
+    <audio id="pageSound" src="blip.mp3" preload="auto"></audio>
+    <!-- audio element for button clicks -->
+    <audio id="klikSound" src="klik.mp3" preload="auto"></audio>
+
+    <script src="NewsAPI.js"></script>
+    <script src="WeatherApi.js"></script>
+    <script>
+        // Theme toggle functionality
+        const klikSound = document.getElementById('klikSound');
+        const themeToggle = document.getElementById('themeToggle');
+        let isBlueTheme = true;
+
+        themeToggle.addEventListener('click', () => {
+            
+            klikSound.play().catch(err => console.warn('Audio playback failed:', err));
+
+            const body = document.body;
+            if (isBlueTheme) {
+                body.classList.add('green-theme');
+                body.classList.remove('blue-theme');
+                themeToggle.textContent = 'Switch to Blue Theme';
+                window.changeMatrixColor('#00FF00');
+            } else {
+                body.classList.add('blue-theme');
+                body.classList.remove('green-theme');
+                themeToggle.textContent = 'Switch to Green Theme';
+                window.changeMatrixColor('#00BFFF');
+            }
+            isBlueTheme = !isBlueTheme;
+        });
+
+        // Matrix Rain Effect (modified to use variable color)
+        window.addEventListener('DOMContentLoaded', () => {
+            const sound = document.getElementById('pageSound');
+            if (sound) {
+                sound.play().catch(err => {
+                    console.warn('Audio playback failed:', err);
+                });
+            }
+
+            const canvas = document.getElementById('matrixRain');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const matrixChars1 = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`';
+            const matrixChars2 = '01';
+            let activeMatrixChars = matrixChars1;
+            let isBinaryRain = false;
+            const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+
+            for (let x = 0; x < columns; x++) {
+                drops[x] = 1;
+            }
+
+            let charColor = '#00BFFF'; // Default blue
+            let rainActive = true;
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                if (!rainActive) return;
+
+                ctx.fillStyle = charColor;
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = activeMatrixChars.charAt(Math.floor(Math.random() * activeMatrixChars.length));
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            setInterval(draw, 35);
+
+            const rainToggle = document.getElementById('rainToggle');
+            if (rainToggle) {
+                rainToggle.addEventListener('click', () => {
+                    const klikSound = document.getElementById('klikSound');
+                    klikSound.play().catch(err => console.warn('Audio playback failed:', err));
+
+                    rainActive = !rainActive;
+                    rainToggle.textContent = rainActive ? 'Turn Off Rain' : 'Turn On Rain';
+                });
+            }
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+            // Expose color change function
+            window.changeMatrixColor = (color) => {
+                charColor = color;
+            };
+        });
+
+        // Network Speed Measurement
+        async function measureNetworkSpeed() {
+            const testUrls = [
+                'https://www.google.com/favicon.ico',
+                'https://www.cloudflare.com/favicon.ico',
+                'https://httpbin.org/image/png'
+            ];
+            
+            let totalSpeed = 0;
+            let successfulTests = 0;
+            
+            for (const url of testUrls) {
+                try {
+                    const startTime = Date.now();
+                    const response = await fetch(url, { 
+                        method: 'GET', 
+                        cache: 'no-cache',
+                        mode: 'no-cors' // Try no-cors to avoid CORS issues
+                    });
+                    
+                    if (response.ok || response.type === 'opaque') {
+                        const endTime = Date.now();
+                        const duration = (endTime - startTime) / 1000; // in seconds
+                        
+                        // Estimate file size (rough approximation)
+                        const sizeInBytes = url.includes('favicon') ? 1024 : 5000;
+                        
+                        const speedBps = sizeInBytes / duration;
+                        const speedKbps = (speedBps * 8) / 1024; // Convert to Kbps
+                        totalSpeed += speedKbps;
+                        successfulTests++;
+                    }
+                } catch (error) {
+                    console.warn('Speed test failed for', url, error);
+                }
+            }
+            
+            if (successfulTests > 0) {
+                const avgSpeedKbps = totalSpeed / successfulTests;
+                const avgSpeedMbps = avgSpeedKbps / 1024;
+                
+                let displaySpeed;
+                if (avgSpeedMbps >= 1) {
+                    displaySpeed = `${avgSpeedMbps.toFixed(2)} Mbps`;
+                } else {
+                    displaySpeed = `${avgSpeedKbps.toFixed(2)} Kbps`;
+                }
+                
+                document.getElementById('networkSpeedText').innerText = displaySpeed;
+            } else {
+                document.getElementById('networkSpeedText').innerText = 'Unable to measure';
+            }
+        }
+
+        // Update network speed every second
+        setInterval(measureNetworkSpeed, 1000);
+        measureNetworkSpeed(); // Initial call
+
+        // Internet Status Check
+        function updateInternetStatus() {
+            const indicator = document.getElementById('statusIndicator');
+            const text = document.getElementById('statusText');
+            if (navigator.onLine) {
+                indicator.classList.add('online');
+                indicator.classList.remove('offline');
+                text.textContent = 'Online';
+            } else {
+                indicator.classList.add('offline');
+                indicator.classList.remove('online');
+                text.textContent = 'Offline';
+            }
+        }
+
+        // Initial check
+        updateInternetStatus();
+
+        // Listen for changes
+        window.addEventListener('online', updateInternetStatus);
+        window.addEventListener('offline', updateInternetStatus);
+
+        // System Performance Update
+        function updateSystemPerformance() {
+            // CPU
+            const cpu = navigator.hardwareConcurrency || 'N/A';
+            document.getElementById('cpuText').textContent = `CPU Cores: ${cpu}`;
+            
+            // Simulate CPU usage (since we can't get real usage in browser)
+            const simulatedUsage = Math.random() * 100;
+            const cpuBar = document.querySelector('.cpu-bar');
+            cpuBar.style.width = `${simulatedUsage}%`;
+
+            // RAM
+            if (performance.memory) {
+                const used = Math.round(performance.memory.usedJSHeapSize / 1024 / 1024);
+                const total = Math.round(performance.memory.totalJSHeapSize / 1024 / 1024);
+                document.getElementById('ramText').textContent = `RAM: ${used}MB / ${total}MB`;
+            } else {
+                document.getElementById('ramText').textContent = 'RAM: N/A';
+            }
+
+            // Battery
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(battery => {
+                    const level = Math.round(battery.level * 100);
+                    const charging = battery.charging ? ' (Charging)' : '';
+                    document.getElementById('batteryText').textContent = `Battery: ${level}%${charging}`;
+                    
+                    // Update battery bars
+                    const bars = document.querySelectorAll('.battery-bar');
+                    const activeBars = Math.round(level / 10); // 10 bars total
+                    
+                    bars.forEach((bar, index) => {
+                        if (index < activeBars) {
+                            bar.classList.add('active');
+                        } else {
+                            bar.classList.remove('active');
+                        }
+                    });
+                });
+            } else {
+                document.getElementById('batteryText').textContent = 'Battery: N/A';
+                // Hide bars if battery API not available
+                document.getElementById('batteryBars').style.display = 'none';
+            }
+        }
+
+        // Initial update
+        updateSystemPerformance();
+
+        // Update every 5 seconds
+        setInterval(updateSystemPerformance, 5000);
+    </script>
+</body>
+</html>
