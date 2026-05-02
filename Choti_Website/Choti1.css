@@ -862,3 +862,94 @@ h1:nth-child(4) {
     opacity: 1;
   }
 }
+
+/* Responsive Layout for Laptops and Mobile */
+@media screen and (min-width: 1025px) {
+  .top-clock {
+    min-width: clamp(280px, 25vw, 396px);
+    padding: clamp(1rem, 1.5vw, 1.8rem) clamp(1.2rem, 2vw, 2.2rem);
+  }
+  
+  .top-clock #digitalTime {
+    font-size: clamp(2rem, 3vw, 3.36rem);
+  }
+  
+  .system-performance-widget {
+    width: clamp(180px, 15vw, 220px);
+    bottom: clamp(220px, 30vh, 280px);
+  }
+  
+  .internet-status-widget {
+    width: clamp(180px, 15vw, 220px);
+    bottom: clamp(110px, 15vh, 140px);
+  }
+  
+  .network-speed-widget {
+    width: clamp(180px, 15vw, 220px);
+    bottom: 20px;
+  }
+  
+  .weather-container {
+    width: clamp(280px, 25vw, 440px);
+    padding: clamp(1rem, 1.5vw, 1.5rem);
+    bottom: 20px;
+  }
+  
+  .theme-toggle {
+    font-size: clamp(12px, 1.2vw, 17px);
+    padding: clamp(6px, 0.8vw, 10px) clamp(10px, 1.5vw, 20px);
+  }
+  
+  .rain-toggle {
+    top: clamp(55px, 8vh, 70px);
+  }
+}
+
+@media screen and (max-width: 1024px), screen and (max-height: 700px) {
+  body {
+    justify-content: flex-start;
+    padding: 15px;
+  }
+
+  /* Make fixed widgets relative on small screens */
+  .top-clock,
+  .weather-container,
+  .system-performance-widget,
+  .internet-status-widget,
+  .network-speed-widget {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    max-width: 600px;
+    margin: 10px auto;
+    z-index: 10;
+  }
+
+  .theme-toggle,
+  .rain-toggle {
+    position: relative;
+    top: auto;
+    right: auto;
+    display: inline-block;
+    margin: 5px;
+  }
+
+  .hero-container {
+    margin-top: 10px;
+  }
+
+  .top-clock #digitalTime {
+    font-size: 2.2rem;
+  }
+  
+  .hero-container h1 {
+    font-size: 1.8rem;
+  }
+
+  .weather-container {
+    margin-bottom: 20px;
+  }
+}
